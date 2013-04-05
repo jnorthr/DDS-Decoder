@@ -1,0 +1,44 @@
+      *****************************************************************
+      *ÄFILE·       : TEST23 contains Trail Rate data from Client     *
+      *               using Call Type 3                               *
+      *                                                               *
+      *ÄDATE·       : 12.03.2004                                      *
+      *****************************************************************
+      *DESCRIPTION·                                                  *
+      *                                                               *
+      *¹Data Description Source for file TEST23                      ·*
+      *                                                               *
+      *REVISIONS·                                                    *
+      * VERS·ÄWHO· ÄDATE·    ÄREF·  ÄDESCRIPTION·                     *
+      * D000  JN    12-03-04  66056 Trail Rate Commissions by Fund    *
+      *                                                               *
+      *****************************************************************
+      *MODIFICATION·                                                 *
+      *                                                               *
+      *****************************************************************
+     A                                      REF(A00)
+     A                                      PFILE(test23.txt)
+     A* This is a comment
+     A          R TEST23F
+     A*
+     A            A43SPFDCDER   10A         REFFLD(SPFDCDE)
+     A                                      COLHDG('Client' 'Fund' 'Code')
+     A            A44PEXTCDER               REFFLD(PEXTCDE)
+     A                                      COLHDG('Client' 'Portfolio' 'Id')
+     A            CALLTYPE       1A         COLHDG('Disco' 'Call' 'Type')
+     A                                      TEXT('Disco Call Type')
+     A            AGREEMENT      3A         TEXT('AgreeType:DCA=Dft SCA=Sp.Com')
+     A                                      COLHDG('Typ' 'DCA=Dft' 'SCA=Sp.Com')
+     A            B21AGENTNOR               REFFLD(AGENTNO)
+     A                                      COLHDG('Client' 'Agent' 'Number')
+     A*
+     A            EFFINITCHG     7S 4       TEXT('Effective Initial Charge')
+     A                                      COLHDG('Effectv' 'Initial' 'Charge')
+     A                                      ALIAS('This is an Alias')
+     A                                      EDTCDE(J) EDTWRD('  ,  ,  .  -')
+     A            TRAILRATE      7S 4       TEXT('Commission Trail Rate %')
+     A                                      COLHDG('Disco' 'TrailRate' 'Comm %')
+     A            A11TSTAMP R   16A         REFFLD(TSTAMP)
+     A          K CALLTYPE
+     A          S CALLTYPE                  VALUES('R','S')
+     A          O AGREEMENT                 VALUES('DCA')

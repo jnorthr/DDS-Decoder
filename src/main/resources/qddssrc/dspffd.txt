@@ -1,0 +1,41 @@
+5722SS1 V5R3M0  040528      Display File Field Description                                      4/14/12  21:08:02       Page    1
+Input parameters                                                                                                                 
+  File  . . . . . . . . . . . . . . . . . . . :  TEST1                                                                           
+    Library . . . . . . . . . . . . . . . . . :  *LIBL                                                                           
+File Information                                                                                                                 
+  File  . . . . . . . . . . . . . . . . . . . :  TEST1                                                                           
+    Library . . . . . . . . . . . . . . . . . :  JNORTHR1                                                                        
+  File location . . . . . . . . . . . . . . . :  *LCL                                                                            
+  Externally described  . . . . . . . . . . . :  Yes                                                                             
+  Number of record formats  . . . . . . . . . :      1                                                                           
+  Type of file  . . . . . . . . . . . . . . . :  Physical                                                                        
+  File creation date  . . . . . . . . . . . . :  04/11/12                                                                        
+  Text 'description'. . . . . . . . . . . . . :  test all data types                                                             
+Record Format Information                                                                                                        
+  Record format . . . . . . . . . . . . . . . :  TEST1F                                                                          
+  Format level identifier . . . . . . . . . . :  4139511A09CE1                                                                   
+  Number of fields  . . . . . . . . . . . . . :      9                                                                           
+  Record length . . . . . . . . . . . . . . . :     81                                                                           
+Field Level Information                                                  
+             Data        Field  Buffer    Buffer        Field    Column  
+  Field      Type       Length  Length  Position        Usage    Heading 
+  D1         DATE           10      10         1        Both     THIS IS       
+                                                                 A        
+                                                                 DATE FIELD  
+    Field text  . . . . . . . . . . . . . . . :  THIS IS A DATE FIELD        
+    Date Format . . . . . . . . . . . . . . . :  *ISO                        
+    Coded Character Set Identifier  . . . . . :    273                       
+  T1         TIME            8       8        11        Both     T1      
+    Time Format . . . . . . . . . . . . . . . :  *ISO                    
+    Coded Character Set Identifier  . . . . . :    273                   
+  Z1         TIMESTAMP      26      26        19        Both     Z1      
+    Coded Character Set Identifier  . . . . . :    273                   
+  S1         CHAR            8       8        45        Both     S1      
+    Coded Character Set Identifier  . . . . . :    273                   
+  H1         HEX             8       8        53        Both     H1      
+    Coded Character Set Identifier  . . . . . :  65535                   
+  ZD1        ZONED        8  2       8        61        Both     ZD1     
+  PD1        PACKED       9  2       5        69        Both     PD1     
+  BD1        BINARY       8  2       4        74        Both     BD1     
+  FD1        FLTSNG       9  4       4        78        Both     FD1    
+                         ****** END OF DATA ******                      
