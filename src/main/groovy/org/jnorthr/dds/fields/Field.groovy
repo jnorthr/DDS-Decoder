@@ -51,5 +51,15 @@ class Field {
         def hr = (hasReference)  ? "yes" : "no "
         def va = (hasValues) ? "Values="+values : "*no values"
         "isComment isRecord isField hasReference Meta Name        Size Decimals Type Use Edit Wd  Edit Cd Alias -------------------       Text\n  $ic        $ir     $ifi       $hr        $metadataUsage  ${name?.padRight(10)}   ${size?.toString().padRight(3)}    ${decimals?.toString().padRight(3)}    $type $usage ${edtwrd?.padRight(10)} ${edtcde} '${alias?.padRight(30)}' '${text?.padRight(30)}' '${colhdg1?.padRight(30)}' '${colhdg2?.padRight(30)}' '${colhdg3?.padRight(30)}' '$comment' \n$va\n"
-    }
+    } // end of toString
+
+
+    // ========================================    
+    // main method to test
+    public static void main(String[] args)
+    {
+        println "======================\nStart of Job ---"
+        println "======================\n End of Job ----"
+    } // end of main
+
 }    // end of Field
