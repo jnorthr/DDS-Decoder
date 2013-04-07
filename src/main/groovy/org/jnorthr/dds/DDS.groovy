@@ -627,7 +627,7 @@ class DDS
 
         // check just creating a DDS list from a DDS filename to constructor w/o need to call loadFields
         println "==========================================================\nStart of Filename Test ---"
-        dds = new DDS("..resources/qddssrc/dds")
+        dds = new DDS("../resources/qddssrc/dds")
         
         println "There were "+dds.lines+" lines"
         println "There were "+dds.fieldCount()+" fields"

@@ -1,3 +1,6 @@
+/*
+* A set of supporting methods for DDS 
+*/
 package org.jnorthr.dds;
 
 import org.jnorthr.dds.fields.Field;
@@ -13,7 +16,7 @@ class DDSSupport
     def log
     def logfilename = "../resources/data/log.txt"
 
-
+    // default constructor
     public DDSSupport()
     {
     	super();
@@ -277,7 +280,8 @@ class DDSSupport
         // only look for REFFLD declaration in Field lines
         if (f.isField)
         {
-	        // look for and process REFFLD next but only on isField lines where a REF has already been declared, an 'R' reference code is in column 28 and the ref file does exist.
+	        // look for and process REFFLD next but only on isField lines where a REF has already been declared, 
+		// an 'R' reference code is in column 28 and the ref file does exist.
 	        say "\n... looking for REFFLD declarations"
 	        tokens.each{word ->
 	            say "... tokens.each(<$word>)"
@@ -413,19 +417,20 @@ class DDSSupport
 
 
     // print content of this line
+    // see:http://publib.boulder.ibm.com/iseries/v5r2/ic2928/index.htm?info/dds/rbafpmstddsover.htm
     public show(txt)
     {
         def line=txt.padRight(80)    
         printx "<"
         printx line[0..4]
         printx ":"
-        printx line[5]
+        printx line[5] // form type , usually A
         printx ":"
-        printx line[6]
+        printx line[6]	// comment declaration if * coded
         printx ":"
-        printx line[7..15]
+        printx line[7..15] // conditioning indicators, ignored in PF and LF DDS
         printx ":"
-        printx line[16]        // R,K,J,S,O ??
+        printx line[16]        // R,K,J,S,O in logical files only; R and K in physical files
         printx ":"
         printx line[17]    
         printx ":"
@@ -437,20 +442,37 @@ class DDSSupport
         printx ":"
         printx line[34]        // field type P,S,B,F,A,H,L,Z,T or J,E,O,G  for double byte char. sets
         printx ":"
-        printx line[35..37]    // decimals
+        printx line[35..36]    // decimals
         printx ":"
-        printx line[38]        // usage: I,O,Both
+        printx line[37]        // usage: I,O,Both
         printx ":"
         
-        printx line[39..43]    // location - blank for PF and LF
+        printx line[38..43]    // location - blank for PF and LF
         printx ":"
         printx line.substring(44)    // keywords: see http://publib.boulder.ibm.com/iseries/v5r2/ic2928/index.htm?info/dds/rbafpmstddsover.htm
-        // COLHDG,TEXT,CHECK,DESCEND,EDTFMT,REF,REFLD,VALUES
+        // COLHDG,TEXT,CHECK,DESCEND,EDTFMT,REF,REFLD,VALUES, ALIAS,COMP,CMP,DATEFMT,DATESEP,EDTCDE
         
         say ">"
             
     } // end of show
     
-
+/*
+The system determines the number of bytes actually occupied in storage as follows: 
+Data Type - Bytes Occupied in Storage
+Character - Number of characters
+Hexadecimal - Number of bytes
+Binary - 
+1 through 4 digits - 2 bytes
+5 through 9 digits - 4 bytes
+10 through 18 digits - 8 bytes
+Zoned decimal - Number of digits
+Packed decimal - (Number of digits/2) + 1 (truncated if fractional)
+Floating-point (single precision) - 4 bytes
+Floating-point (double precision) - 8 bytes
+Date - 10 characters without DATFMT keyword
+and 6, 8 or 10 characters with DATFMT keyword
+Time - 8 characters
+Timestamp - 26 characters
+*/
 
 } // end of class

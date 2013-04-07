@@ -7,6 +7,13 @@ class Field {
     boolean isField     = false
     boolean hasReference       = false
 
+    // needed for key fields
+    boolean isKey         = false
+    boolean hasSelect     = false
+    boolean hasOmit       = false
+    boolean descend       = false
+    int keyno = 0;
+
     char metadataUsage    = ' '    // R,K,J,S,O ??
     String name
     long size       = 0     // in underlying measures digits or bytes

@@ -1,0 +1,15 @@
+     A* This is a comment
+     A          R RECORD                    PFILE(PF1)
+     A
+     A            TRAILRATE      7S 4       TEXT('Commission Trail Rate %')
+     A                                      COLHDG('Disco' 'TrailRate' 'Comm %')
+     A            FIELDC    R   16A         REFFLD(TSTAMP)
+     A            FIELDD         6A       
+     A            FIELDA         1 0        COMP(NE 0)
+     A          K FIELDA
+     A          S FIELDC                    COMP(GE 1)
+     A          S FIELDD                    COMP(NE 'FRED')
+     A          O TRAILRATE                 COMP(EQ 0)
+     A            TRAILRATE                 COMP(EQ 6)
+     A          O FIELDD                    COMP(EQ *NULL)
+     A          O FIELDD                    COMP(EQ ' ')

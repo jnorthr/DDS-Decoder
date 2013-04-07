@@ -1,0 +1,6 @@
+     A          R A00R
+     A            SPFDCDE       12A         COLHDG('CoFunds' 'Fund' 'Code')
+     A            PEXTCDE        5A         COLHDG('CoFunds' 'Portfolio' 'Id')
+     A            AGENTNO        6A         COLHDG('CoFunds' 'Agent' 'Number')
+     A            TSTAMP        16A         TEXT('TIME STAMP')
+
