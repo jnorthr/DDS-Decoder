@@ -100,10 +100,10 @@ class PhysicalFile
     public static void main(String[] args)
     {
         println "======================\nStart of Job ---"
-
+		def path = (args.size() > -1) ? args[0] : ""; 
         def pf = new PhysicalFile()
 
-        def fn = "./qddssrc/dspffd.txt";
+        def fn = path+"dspffd";
         def b = pf.chkobj(fn);
         pf.confirm(b,fn)
 
@@ -111,9 +111,11 @@ class PhysicalFile
         pf.add(n, "TEST1F")
         pf.add("QFILE", fn)
 
-        pf.dumpMeta() 
+        pf.dumpMeta();
+         
         def m = pf.getFieldMeta()
-        println "\nContent of File Attributes\n---------------------------"
+        println "\nContent of File Attributes\n---------------------------";
+        
         m.each{k, v ->
             println "'$k' = '$v'"
         } // end of each
@@ -123,12 +125,11 @@ class PhysicalFile
         println "same with false:"+pf.getRef("QFMT",false)
 
         println "\n=======================\ngetting bad value QXXX :"+pf.getRef("QXXX");
+        
         try{
             println "getting bad value QXXX and true:"+pf.getRef("QXXX",true);
         } catch(Exception s) {println "Exception:"+s.message;}
         println "======================\nEnd of Job ---"
-
-        //System.exit;        
     }   // end of psvm
 
 

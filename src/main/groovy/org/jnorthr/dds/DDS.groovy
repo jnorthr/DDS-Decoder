@@ -575,8 +575,10 @@ class DDS
     {
         println "======================\nStart of Job ---"
         def data = "1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz";
-
-        def dds = new DDS("../resources/qddssrc/TEST23.PF")
+		def dir = args[0]
+		def path = args[1]
+		
+        def dds = new DDS(path+"TEST23.PF")
 	println "step 2"
         dds.dumpFields()
         dds.dumpMap()
@@ -585,7 +587,7 @@ class DDS
 //System.exit(0);
 
         dds = new DDS(true)
-        dds.loadFields("../resources/qddssrc/REFFILE.txt")
+        dds.loadFields(dir+"REFFILE.txt")
         
         println "There were "+dds.lines+" lines"
         println "There were "+dds.fieldCount()+" fields"
@@ -606,7 +608,7 @@ class DDS
 
         println "==========================================================\nStart of Field Test of /dds2.txt ---"
         dds = new DDS()
-        dds.loadFields("../resources/qddssrc/dds2")
+        dds.loadFields(dir+"dds2")
         
         println "There were "+dds.lines+" lines"
         println "There were "+dds.fieldCount()+" fields"
@@ -627,7 +629,7 @@ class DDS
 
         // check just creating a DDS list from a DDS filename to constructor w/o need to call loadFields
         println "==========================================================\nStart of Filename Test ---"
-        dds = new DDS("../resources/qddssrc/dds")
+        dds = new DDS(dir+"dds")
         
         println "There were "+dds.lines+" lines"
         println "There were "+dds.fieldCount()+" fields"

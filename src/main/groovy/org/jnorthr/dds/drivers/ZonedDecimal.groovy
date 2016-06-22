@@ -407,6 +407,7 @@ public class ZonedDecimal
         // BigDecimal bd = -123.4567; padded with zeros on left to nine places
         assert "bd=<-123.4567>00123456P" == "bd=<"+bd+">"+zd.toZonedDecimal(bd, 9);        
         assert "00123456P & 4 decimals" == zd.toZonedDecimal(bd, 9)+" & "+zd.decimalplaces+" decimals" ;
+        println "bd=<-123.4567>00123456P = bd=<"+bd+">"+zd.toZonedDecimal(bd, 9);        
         
         
         assert "main: 123=123" == "main: 123="+zd.toZonedDecimal("123")

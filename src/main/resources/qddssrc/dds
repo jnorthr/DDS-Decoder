@@ -1,0 +1,28 @@
+     A* ORDER HEADER FILE (ORDHDRP)
+     A          R ORDHDR                    TEXT('Order header record')
+     A                                      REFFILE(REFFILE)
+     A            CUST           5P  0      TEXT('Customer Number')
+     A            ORDER          5   0      TEXT('Order Number')
+     A            ORDATE         6   0      TEXT('Order Date')
+     A            CUSORD        15   0      TEXT('Customer Order No.')
+     A            SHPVIA        15          TEXT('Shipping Instr')
+     A            ORDSTS         1          TEXT('Order Status')
+     A            OPRNME        10          TEXT('Operator Name')
+     A            ORDAMT         9   2      TEXT('Order Amount')
+     A            CUTYPE         1          TEXT('Customer Type')
+     A            INVNBR         5   0      TEXT('Invoice Number')
+     A            PRTDAT         6   0      TEXT('Printed Date')
+     A            SEQNBR         5   0      TEXT('Sequence Number')
+     A            OPNSTS         1          TEXT('Open Status')
+     A            LINES          3   0      TEXT('Order Lines')
+     A            ACTMTH         2   0      TEXT('Accounting Month')
+     A            ACTYR          2   0      TEXT('Accounting Year')
+     A            STATE          2          TEXT('State')
+     A            FRED3          2          COLHDG('Fred''H'   ' Said')
+     A                                      TEXT('Some text goes here')
+     A            FRED1                     REFFLD(CODE)
+     A                                      COLHDG('This is Fred 1')
+     A            CUSTOMER                  REFFLD(CUST) ALIAS('Customer_Id') DESCEND
+     A          K FRED1                     DESCEND
+     A          K FRED3
+ 

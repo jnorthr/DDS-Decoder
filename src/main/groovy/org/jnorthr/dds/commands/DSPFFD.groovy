@@ -8,7 +8,7 @@ class DSPFFD
     def audit = true
 
     // partial print of audit
-    def printx(tx) { if (audit) print tx; }
+    def saysomething(tx) { if (audit) print tx; }
 
     // full println if audit flag on
     def say(tx) { if (audit) println(tx);  }
@@ -20,9 +20,10 @@ class DSPFFD
     PhysicalFile pf = null;
 
     // name of this spoolfile
-    def DSPFFDFileName="";
+    def DSPFFDFileName="DSPFFD";
 
     def lines = 0;
+    
     // flag set when reading source lines with field declarations
     boolean fieldsfound = false
 
@@ -33,11 +34,16 @@ class DSPFFD
     String keep=""    
 
 
-    // map of description to gainan IBM file name equiv.
-    def metanames = ["File":"QFILE", "Library":"QLIB", "File location":"QLOC", "Externally described":"QEXT", "Number of record formats":"QRCDFMTS", "Type of file":"QTYPE", "File creation date":"QCRTDAT", 
-    "Text 'description'":"QTEXT", "Record format":"QFMT", "Format level identifier":"QLVL", "Number of fields":"QNBRFLDS", "Record length":"QRCDLEN", "Date Format":"QDATFMT", "Coded Character Set Identifier":"QCCSID", "Time format":"QTIMFMT", "Time Format":"QTIMFMT" ]
+    // map of description to gain an IBM file name equiv.
+    def metanames = ["File":"QFILE", "Library":"QLIB", "File location":"QLOC", "Externally described":"QEXT", 
+    "Number of record formats":"QRCDFMTS", "Type of file":"QTYPE", "File creation date":"QCRTDAT", 
+    "Text 'description'":"QTEXT", "Record format":"QFMT", "Format level identifier":"QLVL", 
+    "Number of fields":"QNBRFLDS", "Record length":"QRCDLEN", "Date Format":"QDATFMT", 
+    "Coded Character Set Identifier":"QCCSID", "Time format":"QTIMFMT", "Time Format":"QTIMFMT" ]
 
-    def metafieldnames = ["Field text":"QTEXT","Date Format":"QDATFMT", "Coded Character Set Identifier":"QCCSID", "Time Format":"QTIMFMT"]
+    def metafieldnames = ["Field text":"QTEXT","Date Format":"QDATFMT", "Coded Character Set Identifier":"QCCSID", 
+    "Time Format":"QTIMFMT"]
+    
     def fieldmap = [:]
 
     // ===================================================
@@ -62,7 +68,7 @@ class DSPFFD
     // dump content of meta map holding IBM names
     public dumpMetaNames()
     {
-        say "\nContent of Meta Names\n---------------------------"
+        say "\nContent of Meta Key Names\n---------------------------"
         metanames.each{k, v ->
             say "'$k' = '$v'"
         } // end of each
@@ -136,6 +142,7 @@ class DSPFFD
         return  (ans==null) ? ""  : ans;
     }    // end of getref
 
+
     // get a map entry, if found, then return map.value else return 'null' or fail
     public getRef(String k, boolean fail)
     {
@@ -164,7 +171,7 @@ class DSPFFD
 
             // look for signal sequence in token
             int k = wd.indexOf(". .")
-            //printx "   k=$k token:$wd"
+            //saysomething "   k=$k token:$wd"
 
             // if no seq. then this is probably a continuation line
             if (k<0) 
@@ -173,7 +180,7 @@ class DSPFFD
                 def t=wd[0..64];
                 boolean sn = (t.trim().size()>0) ? true : false 
                 def t2 = (sn) ? "(something)" : "(nothing)" 
-                //printx t2
+                //saysomething t2
 
                 // nothing in first 64 bytes, just use the comment field cols.:66..80
                 if (!sn)
@@ -199,7 +206,7 @@ class DSPFFD
             else
             {
                 int l = wd.indexOf(":")
-                //printx "( : is at $l )"
+                //saysomething "( : is at $l )"
 
                 // if there's a semicolon, then get text in col 66..80 into t4
                 def t4=""
@@ -235,7 +242,7 @@ class DSPFFD
 
        if (ln.indexOf("§") < 0 )
        {
-           printx "   using <$ln> "
+           saysomething "   using <$ln> "
 
            def n = ln[2..11]
            say "; name=<$n>"       
@@ -344,7 +351,7 @@ class DSPFFD
         // if provided filename does not exist, try the .txt version 
         if (!f)  
         {
-            filename = fn+".txt"
+            filename = fn;
             f = (pf.chkobj(filename))
             pf.confirm(f, filename);
 
@@ -365,7 +372,7 @@ class DSPFFD
 
             // pad out the line to void short string causing invalid subscripts
             def line = it.trim();
-            say "read line $lines : $it"
+            //say "read line $lines : $it"
             boolean eof = (line.size() > 5 && line.substring(0,6).equals("******") ) ? true : false;
 
 
@@ -397,13 +404,22 @@ class DSPFFD
     {
         println "======================\nStart of Job ---"
 
-        def dds = new DSPFFD("./qddssrc/dspffd.txt")
-        dds.pf.dumpMeta()
+		def fn = "dspffd";
+		if (args.size()>0)
+		{
+			println "parameters:"
+			args.each{ println it; }
+			println "============================="
+			fn = args[1].trim()+"dspffd";
+		} // end of if
+		
+        def dds = new DSPFFD(fn);
+        
+        dds.pf.dumpMeta();
+        
         dds.dumpMetaNames()
         
         println "======================\nEnd of Job ---"
 
-        //System.exit;        
     }   // end of psvm
-
 }    // end of class

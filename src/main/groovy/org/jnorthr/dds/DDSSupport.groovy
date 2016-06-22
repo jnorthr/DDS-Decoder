@@ -14,51 +14,10 @@ class DDSSupport
     def logflag =  false
 
     def log
-    def logfilename = "../resources/data/log.txt"
-
-    // default constructor
-    public DDSSupport()
-    {
-    	super();
-    	say "Starting DDSSupport constructor"
-    } // end of constructor
-
-
-    def say(tx) 
-	{ 
-		say(tx, true)
-	} // end of say
-
-	// extended say to write newline (true) when log of text; 
-    def say(tx, boolean newline) 
-	{ 
-		if (audit) 
-		{
-
-		    if (logflag)
-		    {
-		    	log.append(tx) 			// write to target
-		    	if (newline) { log.append("\n") }
-		    } // end of if
-
-		    else
-		    {
-		    	logflag = true;
-				log = new File(logfilename) // construct File
-
-			    log.append("\n===================================================================\n")
-			    log.append("writing :"+logfilename+"\n")
-				log.append(tx) 			// write to target
-		    	if (newline) { log.append("\n") }
-		    } // end of else
-
-		} // end of if audit
-
-	} // end of say
-
-
-    def printx(tx) { say(tx, false); }
-
+    def logfilepath = System.getProperty("LOGFILEPATH");
+    def logfilename = "log.txt"
+    // /Users/jimnorthrop/Dropbox/Projects/DDS-Decoder/src/main/groovy/org/jnorthr/dds
+    def ddsfilepath = System.getProperty("DDSFILEPATH");
 
     // related to FRF container    
     boolean hasValidFRF = false;
@@ -68,6 +27,58 @@ class DDSSupport
 
     // Object handle to DDS for the loaded Field Reference File
     def FRF
+
+
+    // path constructor
+    public DDSSupport(String path, String ddspath)
+    {
+    	super();
+    	logfilepath = path;
+    	ddsfilepath = ddspath;
+    	println "Starting DDSSupport constructor at path "+logfilepath;
+    } // end of constructor
+
+
+	// produce log with CR/LF
+    boolean say(tx) 
+	{ 
+		return say(tx, true)
+	} // end of say
+
+	// extended say to write newline (true) when log of text; 
+    boolean  say(tx, boolean newline) 
+	{ 
+		if (audit) 
+		{
+
+		    if (logflag)
+		    {
+		    	log.append(tx) 			// write to target
+		    	if (newline) { log.append("\n") }
+		    	return true
+		    } // end of if
+
+		    else
+		    {
+		    	logflag = true;
+				log = new File(logfilepath+logfilename) // construct File
+
+			    log.append("\n===================================================================\n")
+			    log.append("writing :"+logfilepath+logfilename+"\n")
+				log.append(tx) 			// write to target
+		    	if (newline) { log.append("\n") }
+		    	return true
+		    } // end of else
+
+		} // end of if audit
+		
+		else
+			return false;
+	} // end of say
+
+    // output a bit of text without a newline ending
+    boolean saysomething(tx) { return say(tx, false); }
+
 
 
     // pull field attributes from the external field reference file
@@ -238,10 +249,10 @@ class DDSSupport
         if (f.isRecord)
         {
    	        // look for and process REF first but only on isRecord lines
-	        printx "\n... looking for REF declarations:"
+	        saysomething "\n... looking for REF declarations:"
 	        
 	        tokens.each{wd ->
-	            printx "wd=<$wd> sz=${wd.trim().size()} first ( is at ${wd.indexOf('(')} f.isRecord=${f.isRecord}    "
+	            saysomething "wd=<$wd> sz=${wd.trim().size()} first ( is at ${wd.indexOf('(')} f.isRecord=${f.isRecord}    "
 	            if ( wd.trim().size() > 3 )
 	            {
 	                r = wd.indexOf("(")
@@ -400,7 +411,7 @@ class DDSSupport
     // take off surrounding quote marks then return a trimmed version
     public keepRefFile(def r)
     {
-        def r2 = "../resources/qddssrc/" + r.trim() + ".txt"
+        def r2 = "${ddsfilepath}/${r.trim()}"
         def rf = new File(r2)
 
         if (rf.exists())
@@ -408,7 +419,8 @@ class DDSSupport
             RefFile = r2;
             say "-> Field Reference File will be "+r2
             FRF = new DDS(RefFile, true)
-            hasValidFRF = true;  
+            hasValidFRF = true;
+            return r2;  
         } // end of 
         else
 		throw new FileNotFoundException(r2+" Reference File cannot be found or used");        
@@ -418,44 +430,53 @@ class DDSSupport
 
     // print content of this line
     // see:http://publib.boulder.ibm.com/iseries/v5r2/ic2928/index.htm?info/dds/rbafpmstddsover.htm
-    public show(txt)
+    public boolean show(txt)
     {
         def line=txt.padRight(80)    
-        printx "<"
-        printx line[0..4]
-        printx ":"
-        printx line[5] // form type , usually A
-        printx ":"
-        printx line[6]	// comment declaration if * coded
-        printx ":"
-        printx line[7..15] // conditioning indicators, ignored in PF and LF DDS
-        printx ":"
-        printx line[16]        // R,K,J,S,O in logical files only; R and K in physical files
-        printx ":"
-        printx line[17]    
-        printx ":"
-        printx line[18..27]    // field name
-        printx ":"
-        printx line[28]        // R if reffld used
-        printx ":"
-        printx line[29..33]    // field size
-        printx ":"
-        printx line[34]        // field type P,S,B,F,A,H,L,Z,T or J,E,O,G  for double byte char. sets
-        printx ":"
-        printx line[35..36]    // decimals
-        printx ":"
-        printx line[37]        // usage: I,O,Both
-        printx ":"
+        saysomething "<"
+        saysomething line[0..4]
+        saysomething ":"
+        saysomething line[5] // form type , usually A
+        saysomething ":"
+        saysomething line[6]	// comment declaration if * coded
+        saysomething ":"
+        saysomething line[7..15] // conditioning indicators, ignored in PF and LF DDS
+        saysomething ":"
+        saysomething line[16]        // R,K,J,S,O in logical files only; R and K in physical files
+        saysomething ":"
+        saysomething line[17]    
+        saysomething ":"
+        saysomething line[18..27]    // field name
+        saysomething ":"
+        saysomething line[28]        // R if reffld used
+        saysomething ":"
+        saysomething line[29..33]    // field size
+        saysomething ":"
+        saysomething line[34]        // field type P,S,B,F,A,H,L,Z,T or J,E,O,G  for double byte char. sets
+        saysomething ":"
+        saysomething line[35..36]    // decimals
+        saysomething ":"
+        saysomething line[37]        // usage: I,O,Both
+        saysomething ":"
         
-        printx line[38..43]    // location - blank for PF and LF
-        printx ":"
-        printx line.substring(44)    // keywords: see http://publib.boulder.ibm.com/iseries/v5r2/ic2928/index.htm?info/dds/rbafpmstddsover.htm
+        saysomething line[38..43]    // location - blank for PF and LF
+        saysomething ":"
+        saysomething line.substring(44)    
+        // keywords: see http://publib.boulder.ibm.com/iseries/v5r2/ic2928/index.htm?info/dds/rbafpmstddsover.htm
         // COLHDG,TEXT,CHECK,DESCEND,EDTFMT,REF,REFLD,VALUES, ALIAS,COMP,CMP,DATEFMT,DATESEP,EDTCDE
         
-        say ">"
+        say '''>'''
             
     } // end of show
     
+    // main method to test
+    public static void main(String[] args)
+    {
+        println "======================\nStart of Job ---"
+        println "This is a test harness for the DDSSupport test plan"
+        def dds = new DDSSupport(args[0],args[1])
+	}
+
 /*
 The system determines the number of bytes actually occupied in storage as follows: 
 Data Type - Bytes Occupied in Storage

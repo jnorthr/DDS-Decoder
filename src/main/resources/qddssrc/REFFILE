@@ -1,0 +1,9 @@
+     A          R REFFILE                   TEXT('Field Reference File')
+     A            FRED3          2          COLHDG('Fred''Has' ' Said')
+     A                                      TEXT('Some text goes here')
+     A            CODE           2A         COLHDG('Code'  'Field')
+     A                                      TEXT('This is a typical code field')
+     A            CUST           5P  0      TEXT('Customer REFFILE.txt TEXT')
+     A                                      COLHDG('Customer' 'REFFILE.txt' 'COLHDG')
+     A                                      ALIAS(CUSTOMER_REFFILE_ALIAS)
+

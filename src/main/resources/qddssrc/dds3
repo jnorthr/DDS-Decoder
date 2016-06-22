@@ -1,0 +1,5 @@
+     A          R ORDHDR                    TEXT('Order header record')
+     A            FRED1          2          EDTCDE(J)
+     A            FRED3         12          COLHDG('THIS' 'IS A' 'TEST')
+     A          K FRED3
+ 

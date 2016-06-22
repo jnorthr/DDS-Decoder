@@ -1,0 +1,12 @@
+     A          R ORDHDR                    TEXT('Order header record')
+     A                                      REFFILE(REFFILE)
+     A            FRED1                     REFFLD(CODE)
+     A                                      TEXT('Some text goes here')
+     A                                      COLHDG('Fred''H'   ' Said')
+     A            FRED3         12          COLHDG('THIS' 'IS A' 'TEST')
+     A            CUST                      REFFLD(CUST) EDTWRD('  .  ')
+     A                                      ALIAS('Customer_Number_Alias')
+     A            BIRDLAND                  ALIAS('Big_Brother')
+     A                                      REFFLD(CUST) DESCEND
+     A          K CUST                      DESCEND TEXT('DESCENDING Cust Key')
+     A          K BIRDLAND 

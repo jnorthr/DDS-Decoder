@@ -4,12 +4,11 @@
 // /Volumes/Data/dev/gradleprojects/project3/build.gradle
 
 // get externals via plugins
-apply plugin:'java'
 apply plugin:'groovy'
 apply plugin:'application'
  
 repositories{
-	mavenCentral()
+		jcenter()
         maven { url "http://m2repo.spockframework.org/snapshots" }
 }
 
@@ -18,10 +17,12 @@ repositories{
 dependencies{
 	// maven  group       : artifact    :vers
 	compile 'commons-codec:commons-codec:1.6'
+	
 	// need to pick which groovy version to use for project - does NOT use gradle's version
-	groovy 'org.codehaus.groovy:groovy:1.8.6'
+	compile 'org.codehaus.groovy:groovy:2.4.7'
+	//testCompile 'org.codehaus.groovy:groovy:2.4.7'
 	testCompile 'junit:junit:4.8.2'
-        testCompile "org.spockframework:spock-core:0.6-groovy-1.8"
+    //testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
 }
 
 // sample to use git - may not work well
@@ -51,7 +52,7 @@ hello{
 world{
 	dependsOn << hello
 	doLast{
-		say "World !"
+		say "World ! ${projectDir}"
 	}
 }
 
@@ -67,45 +68,79 @@ task helloWorld2{
 task hotJava(type:JavaExec){
 	main='org.jnorthr.dds.Test'
 	// set c/p to use the gradle composite cp it builds on the fly
-	classpath = runtimeClasspath
+	classpath += sourceSets.main.runtimeClasspath
+	args "${projectDir}/build/resources/main/data/", "${projectDir}/build/resources/main/qddssrc/"
 }
 
-task(runSimple, dependsOn: 'classes', type: JavaExec) {
-	main = 'org.jnorthr.dds.MyApp'
+task(runDSPFFD, dependsOn: 'classes', type: JavaExec) {
+	main = 'org.jnorthr.dds.commands.DSPFFD'
 	classpath = sourceSets.main.runtimeClasspath
-	args 'jimbo', 'hi kids'
-	systemProperty 'simple.message', 'Hi kids '
+	args "${projectDir}/build/resources/main/data/", "${projectDir}/build/resources/main/qddssrc/"
+	systemProperty 'LOGFILEPATH', "${projectDir}/build/resources/main/data/"
 }
 
-//
-defaultTasks 'runSimple'
+task(runSupport, dependsOn: 'classes', type: JavaExec) {
+	main = 'org.jnorthr.dds.DDSSupport'
+	classpath = sourceSets.main.runtimeClasspath
+	args "${projectDir}/build/resources/main/data/", "${projectDir}/build/resources/main/qddssrc/"
+}
+
+task(runChooser, dependsOn: 'classes', type: JavaExec) {
+	main = 'org.jnorthr.dds.utilities.Chooser'
+	classpath = sourceSets.main.runtimeClasspath
+	classpath += sourceSets.main.compileClasspath
+}
+
+task(runPF, dependsOn: 'classes', type: JavaExec) {
+	main = 'org.jnorthr.dds.drivers.PhysicalFile'
+	classpath = sourceSets.main.runtimeClasspath
+	systemProperty 'LOGFILEPATH', "${projectDir}/build/resources/main/data/"
+	args "${projectDir}/build/resources/main/qddssrc/"
+}
+
+task(runZD, dependsOn: 'classes', type: JavaExec) {
+	main = 'org.jnorthr.dds.drivers.ZonedDecimal'
+	systemProperty 'LOGFILEPATH', "${projectDir}/build/resources/main/data/"
+	classpath = sourceSets.main.runtimeClasspath
+}
+
+// ./gradlew   // will run this default task
+defaultTasks 'runDSPFFD'
 
 
 // http://www.gradle.org/docs/current/userguide/application_plugin.html
 // also has a bunch of other helper tasks - well worth a look
-mainClassName='org.jnorthr.dds.DDS'  // used by application plugin so 'gradle run' runs your app
+run{
+	mainClassName='org.jnorthr.dds.DDS'  // used by application plugin so 'gradle run' runs your app
+    args "${projectDir}/build/resources/main/data/","${projectDir}/build/resources/main/qddssrc/"
+	systemProperty 'LOGFILEPATH', "${projectDir}/build/resources/main/data/"	
+}
 
 // ================================
 // test features
 test{
-//useTestNG()
-systemProperty 'some.prop','value'
-include 'org/jnorthr/dds/**'
-exclude 'org/jnorthr/fred/**'
-testLogging.showStandardStreams = true
-maxHeapSize="512m"
-jvmArgs '-XX:MaxPermSize=256m'
-beforeTest{ descriptor -> logger.lifecycle("Running test:"+descriptor)}
-afterTest { desc, result -> 
+	//useTestNG() and set Java system properties
+	systemProperty 'LOGFILEPATH', "${projectDir}/build/resources/main/data/"	
+	systemProperty 'DDSFILEPATH', "${projectDir}/build/resources/main/qddssrc/"	
+
+	include 'org/jnorthr/dds/**'
+	exclude 'org/jnorthr/fred/**'
+	testLogging.showStandardStreams = true
+	maxHeapSize="512m"
+	jvmArgs '-XX:MaxPermSize=256m'
+
+	beforeTest{ descriptor -> logger.lifecycle("Running test:"+descriptor)}
+
+	afterTest { desc, result -> 
         println "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
-}
-onOutput{descriptor, event -> logger.lifecycle("Test:"+descriptor+" gave std out/err:"+event.message)}
+	}
+	onOutput{descriptor, event -> logger.lifecycle("Test:"+descriptor+" gave std out/err:"+event.message)}
 }
 test.dependsOn cleanTest
 
 // ================================
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.5'
+    gradleVersion = '2.13'
 }
 
 // run this task once to build project folder structure
